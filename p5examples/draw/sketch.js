@@ -35,7 +35,7 @@ function preload() {
 // });
 
 function setup() {
-  myCanvas = createCanvas(1820, 540);
+  myCanvas = createCanvas(1420, 650);
   background(255);
 
   // Define and create an instance of kinectron
@@ -107,12 +107,21 @@ function mfcb2(data) {
 }
 
 function draw() {
-  if (feetTouching) {
+  if (handsTouching) {
+    background(0,10);
+    //sinBackground();
+    var color1 = color(142,12,232);
+    var color2 = color(255,0,0);
+    drawAllJoints(joints1, color1, 0);
+    drawAllJoints(joints2, color2, image2XOffset);
+  } else if (feetTouching) {
     background(random(255), random(255), random(255)); 
-  } else if (handsTouching) {
-    sinBackground();
+    if (image1Loaded) image(image1,0,0);
+    if (image2Loaded) image(image2, image2XOffset,0);  
   } else { 
     background(255,1);
+    if (image1Loaded) image(image1,0,0);
+    if (image2Loaded) image(image2, image2XOffset,0);  
   }
 
   // fill(255,0,0,100);
@@ -126,11 +135,18 @@ function draw() {
     feetTouching = checkLandR(15, 19);
   }
 
-  if (image1Loaded) image(image1,0,0);
+  // if (handsTouching) {
+  //   //drawAllJoints();
+  // } else {
+  //   if (image1Loaded) image(image1,0,0);
+  //   if (image2Loaded) image(image2, image2XOffset,0);  
+  // }
 
-  if (image2Loaded) image(image2, image2XOffset,0);
+  
 
 }
+
+
 
 function checkLandR(left, right) {
     var p1L = getJointLocation(joints1[left], 0);
@@ -154,6 +170,15 @@ function checkLandR(left, right) {
 
 
 
+}
+
+function drawAllJoints(joints, c, xOffset) {
+  noStroke();
+  for (var j = 0; j < joints.length; j++) {
+    var newJoint = getJointLocation(joints[j], xOffset);
+    fill(c);
+    ellipse(newJoint.x, newJoint.y, 10,10);
+  }
 }
 
 function getJointLocation(joint, xOffset) {
@@ -227,7 +252,7 @@ function sinBackground () {
   calcWave();
   renderWave();
   stroke(255);
-  text(frameRate(), 0,0, 100,100);
+  //text(frameRate(), 0,0, 100,100);
 
 }
 
